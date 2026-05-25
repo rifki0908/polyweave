@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polyweave — OpenAPI to Multi-Language SDK Generator</title>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --panel: #131826;
+    --panel-2: #1a2030;
+    --border: #283042;
+    --text: #e6e9f0;
+    --muted: #8993a8;
+    --accent: #6ee7b7;
+    --accent-2: #60a5fa;
+    --warn: #f59e0b;
+    --error: #ef4444;
+    --code: #0f1422;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    line-height: 1.5;
+  }
+  header {
+    padding: 32px 24px 16px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  h1 { margin: 0 0 8px; font-size: 32px; font-weight: 700; }
+  h1 .pw { color: var(--accent); }
+  .tagline { color: var(--muted); font-size: 14px; margin: 0; }
+  main { max-width: 1100px; margin: 0 auto; padding: 24px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  textarea {
+    width: 100%; min-height: 320px;
+    background: var(--code);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    resize: vertical;
+  }
+  button {
+    background: var(--accent);
+    color: #042f1f;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 16px 0; }
+  .pill { background: var(--panel-2); border: 1px solid var(--border); padding: 4px 10px; border-radius: 12px; font-size: 12px; color: var(--muted); }
+  .pill.live { color: var(--accent); border-color: var(--accent); }
+  .agent-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin: 16px 0; }
+  .agent {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+  }
+  .agent .name { font-weight: 600; font-size: 13px; }
+  .agent .status { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .agent .tokens { font-size: 11px; color: var(--accent); margin-top: 2px; }
+  .agent.running { border-color: var(--warn); }
+  .agent.done { border-color: var(--accent); }
+  pre {
+    background: var(--code);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    overflow-x: auto;
+    font-size: 12px;
+    margin: 8px 0;
+  }
+  .tabs { display: flex; gap: 4px; flex-wrap: wrap; margin: 16px 0 8px; }
+  .tab { padding: 6px 12px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 13px; }
+  .tab.active { background: var(--accent); color: #042f1f; }
+  .summary {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    margin: 16px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .stat .v { font-size: 22px; font-weight: 700; color: var(--accent-2); }
+  .stat .l { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+  .err { color: var(--error); font-size: 13px; }
+  footer { padding: 24px; text-align: center; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 32px; }
+  .gh { color: var(--accent-2); text-decoration: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="pw">Polyweave</span> — OpenAPI → Multi-Language SDK</h1>
+  <p class="tagline">5 parallel language agents + 1 synthesis agent · powered by Xiaomi MiMo v2.5 Pro</p>
+</header>
+
+<main>
+  <div class="row">
+    <span class="pill live" id="health">● checking…</span>
+    <span class="pill" id="model">model: —</span>
+    <span class="pill">5 langs · TS · Py · Go · Rust · Ruby</span>
+  </div>
+
+  <div class="agent-grid" id="agents">
+    <div class="agent" data-lang="typescript"><div class="name">TypeScript SDK</div><div class="status">idle</div><div class="tokens"></div></div>
+    <div class="agent" data-lang="python"><div class="name">Python SDK</div><div class="status">idle</div><div class="tokens"></div></div>
+    <div class="agent" data-lang="go"><div class="name">Go SDK</div><div class="status">idle</div><div class="tokens"></div></div>
+    <div class="agent" data-lang="rust"><div class="name">Rust SDK</div><div class="status">idle</div><div class="tokens"></div></div>
+    <div class="agent" data-lang="ruby"><div class="name">Ruby SDK</div><div class="status">idle</div><div class="tokens"></div></div>
+    <div class="agent" data-lang="synthesis"><div class="name">Synthesizer</div><div class="status">idle</div><div class="tokens"></div></div>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <label>OpenAPI 3.x Spec (JSON or YAML)</label>
+      <textarea id="spec" placeholder="Paste your OpenAPI 3.x spec here…"></textarea>
+      <div class="row">
+        <button id="loadExample">Load petstore example</button>
+        <button id="generate">⚡ Generate SDKs</button>
+      </div>
+      <div id="error" class="err"></div>
+    </div>
+    <div class="panel">
+      <label>Output</label>
+      <div class="summary" id="summary" style="display:none">
+        <div class="stat"><div class="v" id="stat-total">—</div><div class="l">Total tokens</div></div>
+        <div class="stat"><div class="v" id="stat-wall">—</div><div class="l">Wall clock</div></div>
+        <div class="stat"><div class="v" id="stat-agents">—</div><div class="l">Agents</div></div>
+        <div class="stat"><div class="v" id="stat-endpoints">—</div><div class="l">Endpoints</div></div>
+      </div>
+      <div class="tabs" id="tabs"></div>
+      <pre id="output" style="min-height: 320px;">No output yet. Paste a spec and click Generate.</pre>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Polyweave · MIT license · <a class="gh" href="https://github.com/rifki0908/polyweave">github.com/rifki0908/polyweave</a>
+</footer>
+
+<script>
+const API_BASE = location.hostname === "localhost" || location.hostname === "127.0.0.1"
+  ? "http://localhost:8000"
+  : "/api";
+
+async function checkHealth() {
+  try {
+    const r = await fetch(`${API_BASE}/api/health`);
+    const j = await r.json();
+    document.getElementById("health").textContent = "● connected";
+    document.getElementById("model").textContent = `model: ${j.model}`;
+  } catch (e) {
+    document.getElementById("health").textContent = "● offline";
+    document.getElementById("health").classList.remove("live");
+  }
+}
+
+async function loadExample() {
+  const r = await fetch("examples/petstore.json").catch(() => null);
+  if (r && r.ok) {
+    document.getElementById("spec").value = await r.text();
+    return;
+  }
+  // Inline fallback
+  document.getElementById("spec").value = JSON.stringify({
+    openapi: "3.0.3",
+    info: {title: "Petstore", version: "1.0.0"},
+    paths: {
+      "/pets": {
+        get: {operationId: "listPets", summary: "List pets", responses: {"200": {description: "ok"}}},
+        post: {operationId: "createPet", summary: "Create pet", responses: {"201": {description: "created"}}}
+      }
+    },
+    components: {schemas: {Pet: {type: "object", properties: {id: {type: "string"}, name: {type: "string"}}}}}
+  }, null, 2);
+}
+
+async function generate() {
+  const spec = document.getElementById("spec").value.trim();
+  if (!spec) { document.getElementById("error").textContent = "Spec is empty"; return; }
+  document.getElementById("error").textContent = "";
+  document.getElementById("generate").disabled = true;
+  document.querySelectorAll(".agent").forEach(a => {
+    a.classList.add("running");
+    a.querySelector(".status").textContent = "running…";
+  });
+
+  try {
+    const r = await fetch(`${API_BASE}/api/generate`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({spec})
+    });
+    if (!r.ok) {
+      const e = await r.json();
+      throw new Error(e.detail || r.statusText);
+    }
+    const data = await r.json();
+    renderResult(data);
+  } catch (e) {
+    document.getElementById("error").textContent = `Error: ${e.message}`;
+    document.querySelectorAll(".agent").forEach(a => {
+      a.classList.remove("running");
+      a.querySelector(".status").textContent = "failed";
+    });
+  } finally {
+    document.getElementById("generate").disabled = false;
+  }
+}
+
+function renderResult(data) {
+  const summary = document.getElementById("summary");
+  summary.style.display = "grid";
+  document.getElementById("stat-total").textContent = data.summary.total_tokens.toLocaleString();
+  document.getElementById("stat-wall").textContent = `${data.summary.wall_clock_seconds}s`;
+  document.getElementById("stat-agents").textContent = data.summary.agent_count;
+  document.getElementById("stat-endpoints").textContent = data.spec_meta.endpoint_count;
+
+  for (const [lang, agent] of Object.entries(data.agents)) {
+    const node = document.querySelector(`.agent[data-lang="${lang}"]`);
+    if (!node) continue;
+    node.classList.remove("running"); node.classList.add("done");
+    node.querySelector(".status").textContent = `${agent.elapsed_seconds}s`;
+    node.querySelector(".tokens").textContent = `${agent.total_tokens.toLocaleString()} tokens`;
+  }
+  const synthNode = document.querySelector('.agent[data-lang="synthesis"]');
+  synthNode.classList.remove("running"); synthNode.classList.add("done");
+  synthNode.querySelector(".status").textContent = `${data.synthesis.elapsed_seconds}s`;
+  synthNode.querySelector(".tokens").textContent = `${data.synthesis.total_tokens.toLocaleString()} tokens`;
+
+  const tabs = document.getElementById("tabs");
+  tabs.innerHTML = "";
+  const tabData = {...data.agents, synthesis: data.synthesis};
+  let first = true;
+  for (const [key, agent] of Object.entries(tabData)) {
+    const t = document.createElement("button");
+    t.className = "tab" + (first ? " active" : "");
+    t.textContent = agent.label || (key.charAt(0).toUpperCase() + key.slice(1));
+    t.onclick = () => {
+      tabs.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      document.getElementById("output").textContent = agent.content;
+    };
+    tabs.appendChild(t);
+    if (first) document.getElementById("output").textContent = agent.content;
+    first = false;
+  }
+}
+
+document.getElementById("loadExample").onclick = loadExample;
+document.getElementById("generate").onclick = generate;
+checkHealth();
+</script>
+</body>
+</html>
