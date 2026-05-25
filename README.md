@@ -5,7 +5,7 @@
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688.svg)](https://fastapi.tiangolo.com/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Model](https://img.shields.io/badge/model-mimo--v2.5--pro-7c3aed.svg)](https://www.xiaomi.com/)
+[![Model](https://img.shields.io/badge/model-Mimo%2Fmimo--v2.5--pro-7c3aed.svg)](https://www.xiaomi.com/)
 
 ---
 
@@ -25,7 +25,7 @@ End-to-end execution recorded against three real OpenAPI specs:
 | Stripe-like billing API | 28 | 18 | 142s | **94,500** | TS · Py · Go · Rust · Ruby |
 | Twilio-like comms API | 64 | 41 | 218s | **187,200** | TS · Py · Go · Rust · Ruby |
 
-All runs against `mimo-v2.5-pro` via the Xiaomi Token Plan endpoint. Each invocation triggers 6 agent calls (5 specialized parallel + 1 synthesis sequential).
+All runs against `Mimo/mimo-v2.5-pro` via the Xiaomi Token Plan endpoint. Each invocation triggers 6 agent calls (5 specialized parallel + 1 synthesis sequential).
 
 Full traces in [`docs/EXAMPLE_RUN.md`](./docs/EXAMPLE_RUN.md).
 
@@ -115,7 +115,7 @@ All LLM calls go through `AsyncOpenAI`. Swap providers via `.env`:
 # Xiaomi MiMo Token Plan (default)
 MIMO_BASE_URL=https://token-plan-sgp.xiaomimimo.com/v1
 MIMO_API_KEY=***
-MIMO_MODEL=mimo-v2.5-pro
+MIMO_MODEL=Mimo/mimo-v2.5-pro
 
 # OpenAI
 MIMO_BASE_URL=https://api.openai.com/v1
